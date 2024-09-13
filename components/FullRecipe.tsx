@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, View, Image, StyleSheet } from "react-native";
+import { ingredients } from '../data/ingredients';
 
 interface Recipe {
     recipe_id: number;
@@ -10,9 +11,17 @@ interface Recipe {
     total_time: number;
     instructions: string;
     image_url: string;
+    ingredient_ids: (string | number)[]
 }
 
 export function FullRecipe({ recipe }: { recipe: Recipe }) {
+    const getIngredientName = (id: number | string) => {
+        if (typeof id === 'string') {
+            return <Text style={styles.boldText}>{id}</Text>;
+        }
+        const ingredient = ingredients.find(ing => ing.id === id);
+        return ingredient ? `${ingredient.quantity} ${ingredient.unit} ${ingredient.name}` : 'Unknown ingredient';
+    };
     return (
         <ScrollView style={styles.container}>
             <Image source={{ uri: recipe.image_url }} style={styles.image} />
@@ -24,6 +33,13 @@ export function FullRecipe({ recipe }: { recipe: Recipe }) {
                 <Text style={styles.timeText}>Cook: {recipe.cook_time} min</Text>
                 <Text style={styles.timeText}>Total: {recipe.total_time} min</Text>
             </View>
+
+            <Text style={styles.sectionTitle}>Ingredients:</Text>
+            {recipe.ingredient_ids.map((id, index) => (
+                <Text key={index} style={styles.ingredient}>
+                    • {getIngredientName(id)}
+                </Text>
+            ))}
 
             <Text style={styles.sectionTitle}>Instructions:</Text>
             {recipe.instructions.split('. ').map((instruction, index) => (
@@ -75,6 +91,15 @@ const styles = StyleSheet.create({
     instruction: {
         fontSize: 22,
         marginBottom: 15,
+    },
+
+    ingredient: {
+        fontSize: 18,
+        marginBottom: 5,
+    },
+
+    boldText: {
+        fontWeight: 'bold',
     },
 });
 

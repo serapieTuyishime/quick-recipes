@@ -21,7 +21,7 @@ export function SplashScreen({ navigation }) {
         <View style={styles.container}>
             <Text style={styles.title}>Welcome to Recipe App</Text>
             <FlatList
-                data={recipes.slice(0, 8)}
+                data={recipes}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 numColumns={numColumns}
@@ -45,6 +45,5 @@ const styles = StyleSheet.create({
     },
     gridContent: {
         padding: 10,
-        backgroundColor: "#bada55"
     },
 });
